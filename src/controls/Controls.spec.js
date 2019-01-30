@@ -1,6 +1,6 @@
 // Test away!
 import React from 'react';
-import { render } from 'react-testing-library';
+import { render, fireEvent } from 'react-testing-library';
 import 'jest-dom/extend-expect';
 
 import Controls from './Controls';
@@ -18,6 +18,16 @@ describe('<Controls />', () => {
       lock = getByText('Unlock Gate');
       expect(lock.textContent).toBe('Unlock Gate');
     });
+    it('toggle disabled when gate is open/close', () => {
+      const { getByText, rerender } = render(<Controls locked={false} closed={true}/>);
+      let lock = getByText('Lock Gate');
+      expect(lock.textContent).toBe('Lock Gate');
+      expect(lock.disabled).toBe(false);
+      
+      rerender(<Controls closed={false} />);
+      lock = getByText('Lock Gate');
+      expect(lock.disabled).toBe(true);
+    });
   });
 
   describe('Gate Control', () => {
@@ -31,6 +41,16 @@ describe('<Controls />', () => {
       rerender(<Controls closed={true} />);
       gate = getByText('Open Gate');
       expect(gate.textContent).toBe('Open Gate');
+    });
+    it('toggle disabled when gate is locked/unlocked', () => {
+      // initialize to unlocked
+      const { getByText, rerender } = render(<Controls locked={false} closed={true}/>);
+      let gate = getByText('Open Gate');
+      expect(gate.disabled).toBe(false);
+
+      rerender(<Controls locked={true} closed={true} />);
+      gate = getByText('Open Gate');
+      expect(gate.disabled).toBe(false);
     });
   });
 })
