@@ -21,21 +21,42 @@ describe('<Dashboard />', () => {
 
   it('change lock status', () => {
     const { getByText } = render(<Dashboard />);
-    let lockButton = getByText('Lock Gate');
     let gateButton = getByText('Close Gate');
     
     fireEvent.click(gateButton);
     let gateStatus = getByText('Closed');
-    lockButton = getByText('Open Gate');
+    gateButton = getByText('Open Gate');
 
     expect(gateStatus.textContent).toBe('Closed');
-    expect(lockButton.textContent).toBe('Open Gate');
+    expect(gateButton.textContent).toBe('Open Gate');
 
     fireEvent.click(gateButton);
     gateStatus = getByText('Open');
-    lockButton = getByText('Close Gate');
+    gateButton = getByText('Close Gate');
 
     expect(gateStatus.textContent).toBe('Open');
-    expect(lockButton.textContent).toBe('Close Gate');
+    expect(gateButton.textContent).toBe('Close Gate');
+  });
+
+  it('change gate status', () => {
+    const { getByText } = render(<Dashboard />);
+    let gateButton = getByText('Close Gate');
+    let lockButton = getByText('Lock Gate');
+    
+    fireEvent.click(gateButton);
+    fireEvent.click(lockButton);
+
+    let lockStatus = getByText('Locked');
+    lockButton = getByText('Unlock Gate')
+
+    expect(lockStatus.textContent).toBe('Locked');
+    expect(lockButton.textContent).toBe('Unlock Gate');
+
+    fireEvent.click(lockButton);
+    lockStatus = getByText('Unlocked');
+    lockButton = getByText('Lock Gate');
+
+    expect(lockStatus.textContent).toBe('Unlocked');
+    expect(lockButton.textContent).toBe('Lock Gate');
   });
 })
